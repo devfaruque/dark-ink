@@ -1,0 +1,790 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="The official home of Elara Vane, author of haunting, unforgettable dark romance." />
+  <title>Dark Ink — Dark Romance by Elara Vane</title>
+
+  <!-- Typography and icon dependencies are the only external resources used. -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,500;1,600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+  <!-- Tailwind CDN keeps this deliverable portable as a single HTML file. -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            ink: '#0b0a0c',
+            night: '#121015',
+            wine: '#6f1d2d',
+            crimson: '#9c3147',
+            gold: '#c4a46c',
+            mist: '#d9d1d0'
+          },
+          fontFamily: {
+            display: ['Playfair Display', 'serif'],
+            sans: ['Inter', 'sans-serif']
+          },
+          boxShadow: {
+            glow: '0 0 45px rgba(156, 49, 71, .20)'
+          }
+        }
+      }
+    };
+  </script>
+  <style>
+    html { scroll-behavior: smooth; }
+    body { background: #0b0a0c; color: #f4efec; }
+    ::selection { background: #9c3147; color: #fff; }
+    .nav-scrolled { background: rgba(11, 10, 12, .92); box-shadow: 0 10px 35px rgba(0,0,0,.25); backdrop-filter: blur(16px); }
+    .hero-video { filter: saturate(.7) contrast(1.08); }
+    .hero-particles { pointer-events: none; opacity: .78; mix-blend-mode: screen; }
+    .hero-orb { pointer-events: none; position: absolute; border-radius: 999px; filter: blur(1px); opacity: .18; animation: orb-float 12s ease-in-out infinite alternate; }
+    .hero-orb-one { width: 18rem; height: 18rem; right: 7%; top: 20%; background: radial-gradient(circle, rgba(156,49,71,.45), transparent 68%); }
+    .hero-orb-two { width: 24rem; height: 24rem; left: 30%; bottom: -20%; background: radial-gradient(circle, rgba(196,164,108,.2), transparent 68%); animation-delay: -4s; animation-duration: 16s; }
+    .cover-shine::after { content: ''; position: absolute; inset: 0; background: linear-gradient(110deg, transparent 20%, rgba(255,255,255,.2) 43%, transparent 64%); transform: translateX(-120%); transition: transform .7s ease; }
+    .cover-shine:hover::after { transform: translateX(120%); }
+    .line-clamp-3 { display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
+    .reveal { opacity: 0; transform: translateY(18px); transition: opacity .65s ease, transform .65s ease; }
+    .reveal.visible { opacity: 1; transform: translateY(0); }
+    .section-fade { opacity: 0; transform: translateY(28px); transition: opacity .9s cubic-bezier(.2,.8,.2,1), transform .9s cubic-bezier(.2,.8,.2,1); }
+    .section-fade.visible { opacity: 1; transform: translateY(0); }
+    .form-input { background: rgba(255,255,255,.045); border: 1px solid rgba(255,255,255,.13); transition: border-color .2s, box-shadow .2s; }
+    .form-input:focus { outline: none; border-color: #c4a46c; box-shadow: 0 0 0 3px rgba(196,164,108,.12); }
+    .magnetic { will-change: transform; transition: transform .25s cubic-bezier(.2,.8,.2,1), box-shadow .25s ease; }
+    .magnetic:hover { box-shadow: 0 12px 30px rgba(156,49,71,.2); }
+    .custom-cursor, .custom-cursor-dot { position: fixed; top: 0; left: 0; z-index: 100; pointer-events: none; opacity: 0; transform: translate3d(-100px, -100px, 0); }
+    .custom-cursor { width: 34px; height: 34px; border: 1px solid rgba(196,164,108,.75); border-radius: 999px; mix-blend-mode: difference; transition: width .25s ease, height .25s ease, border-color .25s ease, background-color .25s ease, opacity .25s ease; }
+    .custom-cursor-dot { width: 5px; height: 5px; border-radius: 999px; background: #c4a46c; transition: transform .12s ease, opacity .2s ease; }
+    .custom-cursor.is-visible, .custom-cursor-dot.is-visible { opacity: 1; }
+    .custom-cursor.is-hovering { width: 58px; height: 58px; border-color: rgba(255,255,255,.9); background: rgba(196,164,108,.12); }
+    .book-card { cursor: pointer; }
+    .book-card:focus-visible { outline: 2px solid #c4a46c; outline-offset: 6px; }
+    .book-modal { opacity: 0; visibility: hidden; pointer-events: none; transition: opacity .3s ease, visibility .3s ease; }
+    .book-modal.is-open { opacity: 1; visibility: visible; pointer-events: auto; }
+    .book-modal-panel { transform: translateY(18px) scale(.98); transition: transform .35s cubic-bezier(.2,.8,.2,1); }
+    .book-modal.is-open .book-modal-panel { transform: translateY(0) scale(1); }
+    body.modal-open { overflow: hidden; }
+    .cart-drawer { visibility: hidden; pointer-events: none; }
+    .cart-drawer.is-open { visibility: visible; pointer-events: auto; }
+    .cart-drawer-backdrop { opacity: 0; transition: opacity .3s ease; }
+    .cart-drawer.is-open .cart-drawer-backdrop { opacity: 1; }
+    .cart-drawer-panel { transform: translateX(100%); transition: transform .35s cubic-bezier(.2,.8,.2,1); }
+    .cart-drawer.is-open .cart-drawer-panel { transform: translateX(0); }
+    .cart-empty { min-height: 14rem; }
+    .order-modal { opacity: 0; visibility: hidden; pointer-events: none; transition: opacity .3s ease, visibility .3s ease; }
+    .order-modal.is-open { opacity: 1; visibility: visible; pointer-events: auto; }
+    .order-modal-panel { transform: translateY(18px) scale(.98); transition: transform .35s cubic-bezier(.2,.8,.2,1); }
+    .order-modal.is-open .order-modal-panel { transform: translateY(0) scale(1); }
+    .payment-modal { opacity: 0; visibility: hidden; pointer-events: none; transition: opacity .3s ease, visibility .3s ease; }
+    .payment-modal.is-open { opacity: 1; visibility: visible; pointer-events: auto; }
+    .payment-modal-panel { transform: translateY(18px) scale(.98); transition: transform .35s cubic-bezier(.2,.8,.2,1); }
+    .payment-modal.is-open .payment-modal-panel { transform: translateY(0) scale(1); }
+    .payment-brand { letter-spacing: -.08em; }
+    .payment-error { border-color: #9c3147 !important; }
+    .success-icon { animation: success-icon-in .55s cubic-bezier(.2,.8,.2,1) both; }
+    @keyframes success-icon-in { from { opacity: 0; transform: scale(.6) rotate(-15deg); } to { opacity: 1; transform: scale(1) rotate(0); } }
+    @media (pointer: coarse), (prefers-reduced-motion: reduce) {
+      .custom-cursor, .custom-cursor-dot { display: none; }
+    }
+    .tilt-card { transform-style: preserve-3d; will-change: transform; transition: transform .25s ease, border-color .25s ease; }
+    .tilt-card .tilt-content { transform: translateZ(18px); }
+    .cart-bump { animation: cart-bump .45s ease; }
+    .success-pulse { animation: success-pulse .7s ease; }
+    .hero-copy { animation: hero-in 1s cubic-bezier(.2,.8,.2,1) both; }
+    @keyframes hero-in { from { opacity: 0; transform: translateY(24px); } to { opacity: 1; transform: translateY(0); } }
+    @keyframes cart-bump { 0%, 100% { transform: scale(1); } 40% { transform: scale(1.35); } 70% { transform: scale(.9); } }
+    @keyframes success-pulse { 0% { box-shadow: 0 0 0 0 rgba(196,164,108,.45); } 100% { box-shadow: 0 0 0 16px rgba(196,164,108,0); } }
+    @keyframes orb-float { from { transform: translate3d(-16px, 10px, 0) scale(.96); } to { transform: translate3d(18px, -18px, 0) scale(1.06); } }
+    @media (max-width: 767px) {
+      .hero-particles { opacity: .48; }
+      .hero-orb { opacity: .09; filter: none; }
+      .section-fade { transition-duration: .65s; }
+      .book-modal-panel { max-height: calc(100vh - 2rem); overflow-y: auto; }
+      .cart-drawer-panel { width: 100%; max-width: none; }
+      .payment-modal-panel, .order-modal-panel { max-height: calc(100vh - 2rem); overflow-y: auto; background-color: #171116; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+      *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; }
+      .reveal, .section-fade { opacity: 1; transform: none; }
+    }
+  </style>
+</head>
+<body class="font-sans antialiased">
+  <span id="custom-cursor" class="custom-cursor" aria-hidden="true"></span>
+  <span id="custom-cursor-dot" class="custom-cursor-dot" aria-hidden="true"></span>
+  <!-- Header -->
+  <header id="site-header" class="fixed inset-x-0 top-0 z-50 border-b border-white/10 transition-all duration-300">
+    <nav class="mx-auto flex max-w-7xl items-center justify-between px-5 py-4 lg:px-8" aria-label="Primary navigation">
+      <a href="#home" class="group flex items-center gap-3" aria-label="Dark Ink home">
+        <span class="grid h-9 w-9 place-items-center rounded-full border border-gold/60 text-gold transition group-hover:rotate-12"><i class="fa-solid fa-feather-pointed text-sm" aria-hidden="true"></i></span>
+        <span class="font-display text-xl tracking-wide">Dark <span class="text-gold">Ink</span></span>
+      </a>
+
+      <div class="hidden items-center gap-8 text-sm text-mist/80 md:flex">
+        <a class="transition hover:text-gold" href="#books">Books</a>
+        <a class="transition hover:text-gold" href="#about">About</a>
+        <a class="transition hover:text-gold" href="#journal">Journal</a>
+        <a class="transition hover:text-gold" href="#contact">Contact</a>
+        <button id="cart-button" class="relative ml-2 text-mist transition hover:text-gold" aria-label="Open shopping cart">
+          <i class="fa-solid fa-bag-shopping text-lg" aria-hidden="true"></i>
+          <span id="cart-count" class="absolute -right-3 -top-3 grid h-5 min-w-5 place-items-center rounded-full bg-crimson px-1 text-[10px] font-bold text-white">0</span>
+        </button>
+      </div>
+
+      <button id="menu-button" class="rounded p-2 text-mist md:hidden" aria-label="Open menu" aria-expanded="false" aria-controls="mobile-menu">
+        <i class="fa-solid fa-bars text-xl" aria-hidden="true"></i>
+      </button>
+    </nav>
+    <div id="mobile-menu" class="hidden border-t border-white/10 bg-ink/95 px-5 pb-5 pt-3 backdrop-blur-xl md:hidden">
+      <div class="flex flex-col gap-4 text-sm text-mist/85">
+        <a href="#books">Books</a><a href="#about">About</a><a href="#journal">Journal</a><a href="#contact">Contact</a>
+        <button id="mobile-cart-button" class="flex items-center gap-2 text-left text-gold"><i class="fa-solid fa-bag-shopping" aria-hidden="true"></i> Cart (<span id="mobile-cart-count">0</span>)</button>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <!-- Hero -->
+    <section id="home" class="relative isolate flex min-h-[720px] items-center overflow-hidden lg:min-h-[820px]">
+      <video class="hero-video absolute inset-0 -z-20 h-full w-full object-cover" autoplay muted loop playsinline poster="https://images.unsplash.com/photo-1512820790803-83ca734da794?auto=format&fit=crop&w=2200&q=85">
+        <source src="https://cdn.coverr.co/videos/coverr-a-woman-reading-a-book-1573/1080p.mp4" type="video/mp4" />
+      </video>
+      <canvas id="hero-particles" class="hero-particles absolute inset-0 -z-[5] h-full w-full" aria-hidden="true"></canvas>
+      <span class="hero-orb hero-orb-one -z-[6]" aria-hidden="true"></span>
+      <span class="hero-orb hero-orb-two -z-[6]" aria-hidden="true"></span>
+      <div class="absolute inset-0 -z-10 bg-[radial-gradient(circle_at_70%_35%,rgba(111,29,45,.28),transparent_37%),linear-gradient(90deg,rgba(11,10,12,.96)_0%,rgba(11,10,12,.76)_42%,rgba(11,10,12,.35)_100%)]"></div>
+      <div class="absolute inset-x-0 bottom-0 -z-10 h-48 bg-gradient-to-t from-ink to-transparent"></div>
+
+      <div class="mx-auto w-full max-w-7xl px-5 pt-24 lg:px-8">
+        <div class="hero-copy max-w-2xl">
+          <p class="mb-6 flex items-center gap-3 text-xs font-semibold uppercase tracking-[.32em] text-gold"><span class="h-px w-10 bg-gold"></span> Stories for the beautifully haunted</p>
+          <h1 class="font-display text-5xl leading-[1.03] text-white sm:text-6xl lg:text-8xl">Enter the world of <em class="text-crimson">dark romance.</em></h1>
+          <p class="mt-7 max-w-lg text-base leading-8 text-mist/75 sm:text-lg">Where forbidden longing meets dangerous devotion, and every happily ever after leaves a scar.</p>
+          <div class="mt-10 flex flex-wrap items-center gap-4">
+            <a href="#books" class="magnetic rounded-sm bg-crimson px-6 py-3.5 text-sm font-semibold text-white shadow-glow transition hover:bg-[#b53b53]">Explore latest novel <i class="fa-solid fa-arrow-right ml-2 text-xs" aria-hidden="true"></i></a>
+            <a href="#about" class="magnetic rounded-sm border border-white/25 px-6 py-3.5 text-sm font-semibold text-white transition hover:border-gold hover:text-gold">Meet the author</a>
+          </div>
+        </div>
+      </div>
+      <div class="absolute bottom-8 left-1/2 hidden -translate-x-1/2 items-center gap-3 text-[10px] uppercase tracking-[.3em] text-mist/50 sm:flex"><span class="h-8 w-px bg-gold/60"></span> Scroll to discover</div>
+    </section>
+
+    <!-- Featured books -->
+    <section id="books" class="section-fade bg-ink px-5 py-24 lg:px-8 lg:py-32">
+      <div class="mx-auto max-w-7xl">
+        <div class="reveal mb-12 flex flex-col justify-between gap-5 md:flex-row md:items-end">
+          <div><p class="mb-3 text-xs font-semibold uppercase tracking-[.28em] text-gold">The collection</p><h2 class="font-display text-4xl sm:text-5xl">Stories that leave a mark.</h2></div>
+          <a href="#contact" class="text-sm text-mist/60 transition hover:text-gold">Join the reader list <i class="fa-solid fa-arrow-right ml-2 text-xs" aria-hidden="true"></i></a>
+        </div>
+        <div class="grid gap-10 md:grid-cols-3">
+          <article class="reveal tilt-card book-card group" tabindex="0" role="button" aria-label="View details for The Saint of Crows" data-title="The Saint of Crows" data-type="Book one" data-price="$18.00" data-description="He was a monster in a tailored suit. She was the only sin he could never confess." data-cover="https://images.unsplash.com/photo-1544947950-fa07a98d237f?auto=format&fit=crop&w=900&q=85">
+            <div class="cover-shine relative aspect-[3/4.35] overflow-hidden rounded-sm bg-wine shadow-2xl">
+              <img src="https://images.unsplash.com/photo-1544947950-fa07a98d237f?auto=format&fit=crop&w=900&q=85" alt="Moody stack of books representing The Saint of Crows" class="h-full w-full object-cover opacity-80 grayscale-[20%] transition duration-700 group-hover:scale-105 group-hover:opacity-100" loading="lazy" />
+              <div class="absolute inset-0 bg-gradient-to-t from-black/85 via-transparent to-black/10"></div><div class="absolute bottom-6 left-6 right-6"><p class="text-xs uppercase tracking-[.25em] text-gold">Book one</p><h3 class="mt-2 font-display text-3xl">The Saint of Crows</h3></div>
+            </div>
+            <p class="mt-5 line-clamp-3 text-sm leading-7 text-mist/65">He was a monster in a tailored suit. She was the only sin he could never confess.</p>
+            <div class="mt-5 flex items-center justify-between"><span class="font-display text-xl text-gold">$18.00</span><button class="add-to-cart rounded-sm border border-white/20 px-4 py-2 text-xs font-semibold transition hover:border-gold hover:text-gold" data-title="The Saint of Crows">Add to cart</button></div>
+          </article>
+
+          <article class="reveal tilt-card book-card group" tabindex="0" role="button" aria-label="View details for The Hollow Crown" data-title="The Hollow Crown" data-type="Book two" data-price="$19.00" data-description="A stolen throne. A ruthless king. And one girl who knows exactly where to place the knife." data-cover="https://images.unsplash.com/photo-1511108690759-009324a90311?auto=format&fit=crop&w=900&q=85" style="transition-delay:100ms">
+            <div class="cover-shine relative aspect-[3/4.35] overflow-hidden rounded-sm bg-[#28383b] shadow-2xl">
+              <img src="https://images.unsplash.com/photo-1511108690759-009324a90311?auto=format&fit=crop&w=900&q=85" alt="Dark forest representing The Hollow Crown" class="h-full w-full object-cover opacity-75 grayscale-[15%] transition duration-700 group-hover:scale-105 group-hover:opacity-100" loading="lazy" />
+              <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-transparent to-black/10"></div><div class="absolute bottom-6 left-6 right-6"><p class="text-xs uppercase tracking-[.25em] text-gold">Book two</p><h3 class="mt-2 font-display text-3xl">The Hollow Crown</h3></div>
+            </div>
+            <p class="mt-5 line-clamp-3 text-sm leading-7 text-mist/65">A stolen throne. A ruthless king. And one girl who knows exactly where to place the knife.</p>
+            <div class="mt-5 flex items-center justify-between"><span class="font-display text-xl text-gold">$19.00</span><button class="add-to-cart rounded-sm border border-white/20 px-4 py-2 text-xs font-semibold transition hover:border-gold hover:text-gold" data-title="The Hollow Crown">Add to cart</button></div>
+          </article>
+
+          <article class="reveal tilt-card book-card group" tabindex="0" role="button" aria-label="View details for A Vow in Velvet" data-title="A Vow in Velvet" data-type="A novella" data-price="$12.00" data-description="Their marriage was a bargain. Their chemistry was the part neither of them planned for." data-cover="https://images.unsplash.com/photo-1516979187457-637abb4f9353?auto=format&fit=crop&w=900&q=85" style="transition-delay:200ms">
+            <div class="cover-shine relative aspect-[3/4.35] overflow-hidden rounded-sm bg-[#422f36] shadow-2xl">
+              <img src="https://images.unsplash.com/photo-1516979187457-637abb4f9353?auto=format&fit=crop&w=900&q=85" alt="Open book representing A Vow in Velvet" class="h-full w-full object-cover opacity-75 transition duration-700 group-hover:scale-105 group-hover:opacity-100" loading="lazy" />
+              <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-transparent to-black/10"></div><div class="absolute bottom-6 left-6 right-6"><p class="text-xs uppercase tracking-[.25em] text-gold">A novella</p><h3 class="mt-2 font-display text-3xl">A Vow in Velvet</h3></div>
+            </div>
+            <p class="mt-5 line-clamp-3 text-sm leading-7 text-mist/65">Their marriage was a bargain. Their chemistry was the part neither of them planned for.</p>
+            <div class="mt-5 flex items-center justify-between"><span class="font-display text-xl text-gold">$12.00</span><button class="add-to-cart rounded-sm border border-white/20 px-4 py-2 text-xs font-semibold transition hover:border-gold hover:text-gold" data-title="A Vow in Velvet">Add to cart</button></div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- About -->
+    <section id="about" class="section-fade border-y border-white/10 bg-night px-5 py-24 lg:px-8 lg:py-32">
+      <div class="mx-auto grid max-w-7xl items-center gap-14 lg:grid-cols-[.9fr_1.1fr] lg:gap-24">
+        <div class="reveal relative mx-auto w-full max-w-md">
+          <div class="absolute -bottom-5 -right-5 h-full w-full border border-gold/35"></div>
+          <img src="https://images.unsplash.com/photo-1551836022-d5d88e9218df?auto=format&fit=crop&w=1000&q=85" alt="Author Elara Vane seated in a moody library" class="relative aspect-[4/5] w-full object-cover grayscale-[25%]" loading="lazy" />
+          <p class="absolute -bottom-10 -left-3 font-display text-7xl italic text-crimson/80">E.V.</p>
+        </div>
+        <div class="reveal">
+          <p class="mb-3 text-xs font-semibold uppercase tracking-[.28em] text-gold">Behind the ink</p>
+          <h2 class="font-display text-4xl leading-tight sm:text-5xl">“I write the love stories that whisper after midnight.”</h2>
+          <div class="mt-7 space-y-5 text-sm leading-8 text-mist/70"><p>Elara Vane is the bestselling author behind the <em>Dark Ink</em> collection. Her work is a study in obsession, power, and the soft violence of wanting someone too much.</p><p>When she isn't writing morally grey men and women who refuse to be saved, she can be found collecting antique keys, drinking black coffee, and avoiding well-lit rooms.</p></div>
+          <a href="#contact" class="mt-8 inline-flex items-center gap-3 border-b border-gold pb-2 text-sm font-semibold text-gold transition hover:border-white hover:text-white">Read her full story <i class="fa-solid fa-arrow-right text-xs" aria-hidden="true"></i></a>
+        </div>
+      </div>
+    </section>
+
+    <!-- Journal -->
+    <section id="journal" class="section-fade bg-ink px-5 py-24 lg:px-8 lg:py-32">
+      <div class="mx-auto max-w-7xl"><div class="reveal mb-12"><p class="mb-3 text-xs font-semibold uppercase tracking-[.28em] text-gold">From the journal</p><h2 class="font-display text-4xl sm:text-5xl">Notes from the shadows.</h2></div>
+        <div class="grid gap-6 md:grid-cols-3">
+          <article class="reveal border border-white/10 bg-white/[.025] p-3 transition hover:-translate-y-1 hover:border-gold/50"><img src="https://images.unsplash.com/photo-1495446815901-a7297e633e8d?auto=format&fit=crop&w=900&q=85" alt="Open books on a wooden table" class="aspect-[1.35/1] w-full object-cover" loading="lazy" /><div class="p-5"><p class="text-xs text-gold">October 12, 2024</p><h3 class="mt-3 font-display text-2xl">On writing the villain you love</h3><a href="#contact" class="mt-5 inline-block text-xs font-semibold uppercase tracking-widest text-mist/60 hover:text-gold">Read more <i class="fa-solid fa-arrow-right ml-1" aria-hidden="true"></i></a></div></article>
+          <article class="reveal border border-white/10 bg-white/[.025] p-3 transition hover:-translate-y-1 hover:border-gold/50" style="transition-delay:100ms"><img src="https://images.unsplash.com/photo-1519682337058-a94d519337bc?auto=format&fit=crop&w=900&q=85" alt="Candle and notebook in a dark room" class="aspect-[1.35/1] w-full object-cover" loading="lazy" /><div class="p-5"><p class="text-xs text-gold">September 28, 2024</p><h3 class="mt-3 font-display text-2xl">A playlist for beautiful disasters</h3><a href="#contact" class="mt-5 inline-block text-xs font-semibold uppercase tracking-widest text-mist/60 hover:text-gold">Read more <i class="fa-solid fa-arrow-right ml-1" aria-hidden="true"></i></a></div></article>
+          <article class="reveal border border-white/10 bg-white/[.025] p-3 transition hover:-translate-y-1 hover:border-gold/50" style="transition-delay:200ms"><img src="https://images.unsplash.com/photo-1455390582262-044cdead277a?auto=format&fit=crop&w=900&q=85" alt="Handwritten notes and fountain pen" class="aspect-[1.35/1] w-full object-cover" loading="lazy" /><div class="p-5"><p class="text-xs text-gold">September 04, 2024</p><h3 class="mt-3 font-display text-2xl">The anatomy of a dangerous promise</h3><a href="#contact" class="mt-5 inline-block text-xs font-semibold uppercase tracking-widest text-mist/60 hover:text-gold">Read more <i class="fa-solid fa-arrow-right ml-1" aria-hidden="true"></i></a></div></article>
+        </div>
+      </div>
+    </section>
+
+    <!-- Contact / newsletter -->
+    <section id="contact" class="section-fade relative overflow-hidden border-t border-white/10 bg-[#171116] px-5 py-24 lg:px-8 lg:py-32">
+      <div class="absolute -right-24 -top-24 h-80 w-80 rounded-full bg-wine/25 blur-3xl"></div>
+      <div class="relative mx-auto grid max-w-7xl gap-14 lg:grid-cols-[.8fr_1.2fr] lg:gap-24">
+        <div class="reveal"><p class="mb-3 text-xs font-semibold uppercase tracking-[.28em] text-gold">Stay close</p><h2 class="font-display text-4xl sm:text-5xl">The best stories are shared in secret.</h2><p class="mt-6 max-w-md text-sm leading-8 text-mist/70">Get occasional letters from Elara, first looks at new releases, and exclusive scenes delivered straight to your inbox. No noise. No spoilers.</p><div class="mt-8 flex gap-4 text-mist/55"><i class="fa-solid fa-envelope-open-text text-xl" aria-hidden="true"></i><span class="text-xs leading-6">Join 12,000+ readers<br />who like their romance dark.</span></div></div>
+        <form id="contact-form" class="reveal grid gap-5 rounded-sm border border-white/10 bg-black/15 p-6 sm:p-8" style="transition-delay:100ms"><div class="grid gap-5 sm:grid-cols-2"><label class="text-xs font-semibold uppercase tracking-widest text-mist/60">Name<input required name="name" type="text" class="form-input mt-2 w-full rounded-sm px-4 py-3 text-sm text-white" placeholder="Your name" /></label><label class="text-xs font-semibold uppercase tracking-widest text-mist/60">Email<input required name="email" type="email" class="form-input mt-2 w-full rounded-sm px-4 py-3 text-sm text-white" placeholder="you@example.com" /></label></div><label class="text-xs font-semibold uppercase tracking-widest text-mist/60">Message<textarea required name="message" rows="5" class="form-input mt-2 w-full resize-none rounded-sm px-4 py-3 text-sm text-white" placeholder="Tell me what you're reading..."></textarea></label><div class="flex flex-wrap items-center justify-between gap-4"><button type="submit" class="rounded-sm bg-gold px-6 py-3.5 text-sm font-semibold text-ink transition hover:bg-white">Send a letter <i class="fa-solid fa-paper-plane ml-2 text-xs" aria-hidden="true"></i></button><span id="form-status" class="text-xs text-gold" role="status"></span></div></form>
+      </div>
+    </section>
+  </main>
+
+  <!-- Book details modal -->
+  <div id="book-modal" class="book-modal fixed inset-0 z-[80] grid place-items-center bg-black/75 p-4 backdrop-blur-sm" role="dialog" aria-modal="true" aria-labelledby="modal-title" aria-describedby="modal-description" aria-hidden="true">
+    <div class="book-modal-panel relative grid w-full max-w-2xl gap-6 rounded-sm border border-white/15 bg-[#171116] p-5 shadow-2xl sm:grid-cols-[.7fr_1fr] sm:p-7">
+      <button id="modal-close" class="absolute right-3 top-3 z-10 grid h-9 w-9 place-items-center rounded-full border border-white/15 text-mist/70 transition hover:border-gold hover:text-gold" aria-label="Close book details"><i class="fa-solid fa-xmark" aria-hidden="true"></i></button>
+      <img id="modal-cover" class="aspect-[3/4] w-full object-cover" src="" alt="" />
+      <div class="flex flex-col justify-center pr-2 sm:pr-5">
+        <p id="modal-type" class="text-xs font-semibold uppercase tracking-[.25em] text-gold"></p>
+        <h2 id="modal-title" class="mt-3 font-display text-4xl leading-tight"></h2>
+        <p id="modal-description" class="mt-5 text-sm leading-7 text-mist/70"></p>
+        <div class="mt-7 flex items-center justify-between gap-4 border-t border-white/10 pt-5"><span id="modal-price" class="font-display text-2xl text-gold"></span><button id="modal-add" class="rounded-sm bg-crimson px-5 py-3 text-sm font-semibold text-white transition hover:bg-[#b53b53]">Add to cart <i class="fa-solid fa-bag-shopping ml-2 text-xs" aria-hidden="true"></i></button></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Shopping cart drawer -->
+  <aside id="cart-drawer" class="cart-drawer fixed inset-0 z-[90]" aria-hidden="true" aria-labelledby="cart-drawer-title">
+    <button class="cart-drawer-backdrop absolute inset-0 h-full w-full cursor-default bg-black/70" aria-label="Close shopping cart"></button>
+    <div class="cart-drawer-panel absolute right-0 top-0 flex h-full w-full max-w-md flex-col border-l border-white/10 bg-[#171116] shadow-2xl">
+      <div class="flex items-center justify-between border-b border-white/10 px-5 py-5"><div><p class="text-xs uppercase tracking-[.25em] text-gold">Your selection</p><h2 id="cart-drawer-title" class="mt-1 font-display text-3xl">Reading bag</h2></div><button id="cart-drawer-close" class="grid h-9 w-9 place-items-center rounded-full border border-white/15 text-mist/70 transition hover:border-gold hover:text-gold" aria-label="Close shopping cart"><i class="fa-solid fa-xmark" aria-hidden="true"></i></button></div>
+      <div id="cart-items" class="flex-1 overflow-y-auto px-5 py-5"></div>
+      <div class="border-t border-white/10 px-5 py-5"><div class="mb-4"><label for="coupon-input" class="text-xs font-semibold uppercase tracking-widest text-mist/55">Have a code?</label><div class="mt-2 flex gap-2"><input id="coupon-input" type="text" maxlength="20" autocomplete="off" class="form-input min-w-0 flex-1 rounded-sm px-3 py-2.5 text-sm uppercase text-white" placeholder="Enter coupon code" /><button id="coupon-apply" class="rounded-sm border border-gold/60 px-4 py-2.5 text-xs font-semibold text-gold transition hover:bg-gold hover:text-ink">Apply</button></div><p id="coupon-status" class="mt-2 min-h-4 text-xs" role="status" aria-live="polite"></p></div><div class="space-y-2 text-sm"><div class="flex items-center justify-between"><span class="text-mist/60">Subtotal</span><span id="cart-subtotal" class="text-mist/80">$0.00</span></div><div id="discount-row" class="hidden items-center justify-between text-gold"><span>Discount</span><span id="cart-discount">−$0.00</span></div><div class="flex items-center justify-between border-t border-white/10 pt-3"><span class="font-semibold">Total</span><strong id="cart-total" class="font-display text-2xl text-gold">$0.00</strong></div></div><button id="checkout-button" class="mt-5 w-full rounded-sm bg-gold px-5 py-3.5 text-sm font-semibold text-ink transition hover:bg-white disabled:cursor-not-allowed disabled:opacity-40" disabled>Continue to checkout <i class="fa-solid fa-arrow-right ml-2 text-xs" aria-hidden="true"></i></button><p class="mt-3 text-center text-[11px] leading-5 text-mist/40">Demo checkout — no payment is processed.</p></div>
+    </div>
+  </aside>
+
+  <!-- Simulated payment gateway -->
+  <div id="payment-modal" class="payment-modal fixed inset-0 z-[100] grid place-items-center bg-black/80 p-4 backdrop-blur-sm" role="dialog" aria-modal="true" aria-hidden="true" aria-labelledby="payment-title">
+    <div class="payment-modal-panel w-full max-w-lg rounded-sm border border-white/15 bg-[#171116] p-6 shadow-2xl sm:p-8">
+      <div class="flex items-start justify-between gap-5"><div><p class="text-xs font-semibold uppercase tracking-[.28em] text-gold">Secure demo checkout</p><h2 id="payment-title" class="mt-2 font-display text-3xl">Complete your order</h2></div><div class="payment-brand text-2xl font-bold text-[#aab7ff]" aria-label="Stripe-style demo">stripe</div></div>
+      <div class="mt-5 flex items-center justify-between rounded-sm border border-white/10 bg-white/[.03] px-4 py-3 text-sm"><span class="text-mist/60">Order total</span><strong id="payment-total" class="font-display text-xl text-gold">$0.00</strong></div>
+      <form id="payment-form" class="mt-6 grid gap-4" novalidate><label class="text-xs font-semibold uppercase tracking-widest text-mist/60">Cardholder name<input required id="payment-name" type="text" autocomplete="cc-name" class="form-input mt-2 w-full rounded-sm px-4 py-3 text-sm text-white" placeholder="Elara Vane" /></label><label class="text-xs font-semibold uppercase tracking-widest text-mist/60">Card number<input required id="payment-card" inputmode="numeric" autocomplete="cc-number" maxlength="19" class="form-input mt-2 w-full rounded-sm px-4 py-3 text-sm tracking-widest text-white" placeholder="4242 4242 4242 4242" /></label><div class="grid gap-4 sm:grid-cols-2"><label class="text-xs font-semibold uppercase tracking-widest text-mist/60">Expiry date<input required id="payment-expiry" inputmode="numeric" autocomplete="cc-exp" maxlength="5" class="form-input mt-2 w-full rounded-sm px-4 py-3 text-sm text-white" placeholder="MM / YY" /></label><label class="text-xs font-semibold uppercase tracking-widest text-mist/60">CVC<input required id="payment-cvc" inputmode="numeric" autocomplete="cc-csc" maxlength="4" class="form-input mt-2 w-full rounded-sm px-4 py-3 text-sm text-white" placeholder="123" /></label></div><label class="text-xs font-semibold uppercase tracking-widest text-mist/60">Email receipt<input required id="payment-email" type="email" autocomplete="email" class="form-input mt-2 w-full rounded-sm px-4 py-3 text-sm text-white" placeholder="you@example.com" /></label><p id="payment-status" class="min-h-4 text-xs" role="status" aria-live="polite">Use the demo card 4242 4242 4242 4242. No payment data is transmitted.</p><div class="flex flex-col-reverse gap-3 sm:flex-row sm:justify-end"><button id="payment-cancel" type="button" class="rounded-sm border border-white/20 px-5 py-3 text-sm font-semibold text-mist/80 transition hover:border-gold hover:text-gold">Back to bag</button><button id="payment-submit" type="submit" class="rounded-sm bg-gold px-5 py-3 text-sm font-semibold text-ink transition hover:bg-white"><i class="fa-solid fa-lock mr-2 text-xs" aria-hidden="true"></i>Pay securely</button></div></form>
+    </div>
+  </div>
+
+  <!-- Persistent checkout confirmation -->
+  <div id="order-modal" class="order-modal fixed inset-0 z-[110] grid place-items-center bg-black/80 p-4 backdrop-blur-sm" role="dialog" aria-modal="true" aria-hidden="true" aria-labelledby="order-title">
+    <div class="order-modal-panel w-full max-w-md rounded-sm border border-gold/30 bg-[#171116] p-7 text-center shadow-2xl sm:p-9">
+      <div class="success-icon mx-auto grid h-16 w-16 place-items-center rounded-full border border-gold/60 bg-gold/10 text-2xl text-gold"><i class="fa-solid fa-check" aria-hidden="true"></i></div>
+      <p class="mt-6 text-xs font-semibold uppercase tracking-[.28em] text-gold">The story is yours</p>
+      <h2 id="order-title" class="mt-3 font-display text-4xl">Order confirmed.</h2>
+      <p class="mt-4 text-sm leading-7 text-mist/70">Your reading bag has been reserved. A confirmation letter will arrive in your inbox shortly.</p>
+      <div class="mt-6 grid grid-cols-2 gap-3 border-y border-white/10 py-4 text-left text-xs"><div><span class="text-mist/45">Order number</span><strong id="order-number" class="mt-1 block text-gold"></strong></div><div><span class="text-mist/45">Order total</span><strong id="order-total" class="mt-1 block text-gold"></strong></div></div>
+      <p id="order-items" class="mt-4 text-xs text-mist/45"></p>
+      <button id="order-close" class="mt-7 w-full rounded-sm bg-gold px-5 py-3.5 text-sm font-semibold text-ink transition hover:bg-white">Continue reading <i class="fa-solid fa-arrow-right ml-2 text-xs" aria-hidden="true"></i></button>
+    </div>
+  </div>
+
+  <footer class="border-t border-white/10 bg-ink px-5 py-10 lg:px-8"><div class="mx-auto flex max-w-7xl flex-col items-center justify-between gap-6 text-center md:flex-row md:text-left"><div><a href="#home" class="font-display text-xl">Dark <span class="text-gold">Ink</span></a><p class="mt-2 text-xs text-mist/45">© 2024 Elara Vane. All rights reserved.</p></div><div class="flex items-center gap-5 text-mist/55"><a href="#" aria-label="Instagram" class="transition hover:text-gold"><i class="fa-brands fa-instagram"></i></a><a href="#" aria-label="TikTok" class="transition hover:text-gold"><i class="fa-brands fa-tiktok"></i></a><a href="#" aria-label="Goodreads" class="transition hover:text-gold"><i class="fa-brands fa-goodreads"></i></a><span class="mx-1 h-4 w-px bg-white/20"></span><a href="#" class="text-xs hover:text-gold">Privacy</a><a href="#" class="text-xs hover:text-gold">Terms</a></div></div></footer>
+
+  <script>
+    const header = document.getElementById('site-header');
+    const menuButton = document.getElementById('menu-button');
+    const mobileMenu = document.getElementById('mobile-menu');
+    const cartCount = document.getElementById('cart-count');
+    const mobileCartCount = document.getElementById('mobile-cart-count');
+    let cartItems = 0;
+    const cart = [];
+    const cartDrawer = document.getElementById('cart-drawer');
+    const cartItemsContainer = document.getElementById('cart-items');
+    const cartSubtotal = document.getElementById('cart-subtotal');
+    const cartDiscount = document.getElementById('cart-discount');
+    const cartTotal = document.getElementById('cart-total');
+    const discountRow = document.getElementById('discount-row');
+    const couponInput = document.getElementById('coupon-input');
+    const couponApply = document.getElementById('coupon-apply');
+    const couponStatus = document.getElementById('coupon-status');
+    const checkoutButton = document.getElementById('checkout-button');
+    const orderModal = document.getElementById('order-modal');
+    const orderNumber = document.getElementById('order-number');
+    const orderTotal = document.getElementById('order-total');
+    const orderItems = document.getElementById('order-items');
+    const orderClose = document.getElementById('order-close');
+    const paymentModal = document.getElementById('payment-modal');
+    const paymentForm = document.getElementById('payment-form');
+    const paymentTotal = document.getElementById('payment-total');
+    const paymentStatus = document.getElementById('payment-status');
+    const paymentSubmit = document.getElementById('payment-submit');
+    const paymentCancel = document.getElementById('payment-cancel');
+    const paymentCard = document.getElementById('payment-card');
+    const paymentExpiry = document.getElementById('payment-expiry');
+    const paymentCvc = document.getElementById('payment-cvc');
+    let previouslyFocusedCartElement = null;
+    let previouslyFocusedOrderElement = null;
+    let activeCoupon = null;
+    const couponCodes = { INK10: { label: '10% off', rate: 0.10 }, DARK15: { label: '15% off', rate: 0.15 } };
+
+    const updateCartBadge = () => {
+      cartItems = cart.reduce((total, item) => total + item.quantity, 0);
+      cartCount.textContent = cartItems;
+      mobileCartCount.textContent = cartItems;
+      cartCount.classList.remove('cart-bump');
+      void cartCount.offsetWidth;
+      cartCount.classList.add('cart-bump');
+    };
+
+    const addCartItem = (title, price) => {
+      const existing = cart.find(item => item.title === title);
+      if (existing) existing.quantity += 1;
+      else cart.push({ title, price, quantity: 1 });
+      updateCartBadge();
+      renderCart();
+    };
+
+    function renderCart() {
+      if (!cart.length) {
+        cartItemsContainer.innerHTML = '<div class="cart-empty grid place-items-center text-center"><div><i class="fa-solid fa-book-open mb-4 text-3xl text-gold/70" aria-hidden="true"></i><p class="font-display text-2xl">Your bag is empty</p><p class="mt-2 text-sm text-mist/50">Choose a story to begin your collection.</p></div></div>';
+        cartSubtotal.textContent = '$0.00';
+        cartDiscount.textContent = '−$0.00';
+        cartTotal.textContent = '$0.00';
+        discountRow.classList.add('hidden');
+        checkoutButton.disabled = true;
+        return;
+      }
+      cartItemsContainer.innerHTML = cart.map((item, index) => `<article class="flex gap-4 border-b border-white/10 py-4 first:pt-0"><div class="min-w-0 flex-1"><h3 class="font-display text-xl">${item.title}</h3><p class="mt-1 text-xs text-gold">${item.price} each</p><div class="mt-3 flex items-center gap-3"><button class="cart-quantity grid h-7 w-7 place-items-center rounded border border-white/15 text-sm transition hover:border-gold hover:text-gold" data-index="${index}" data-action="decrease" aria-label="Decrease quantity of ${item.title}">−</button><span class="min-w-4 text-center text-sm">${item.quantity}</span><button class="cart-quantity grid h-7 w-7 place-items-center rounded border border-white/15 text-sm transition hover:border-gold hover:text-gold" data-index="${index}" data-action="increase" aria-label="Increase quantity of ${item.title}">+</button><button class="cart-remove ml-2 text-xs text-mist/45 transition hover:text-crimson" data-index="${index}">Remove</button></div></div><strong class="font-display text-lg text-gold">$${(Number(item.price.replace('$', '')) * item.quantity).toFixed(2)}</strong></article>`).join('');
+      const subtotal = cart.reduce((total, item) => total + Number(item.price.replace('$', '')) * item.quantity, 0);
+      const discount = activeCoupon ? subtotal * activeCoupon.rate : 0;
+      cartSubtotal.textContent = `$${subtotal.toFixed(2)}`;
+      cartDiscount.textContent = `−$${discount.toFixed(2)}`;
+      cartTotal.textContent = `$${(subtotal - discount).toFixed(2)}`;
+      discountRow.classList.toggle('hidden', discount === 0);
+      discountRow.classList.toggle('flex', discount > 0);
+      checkoutButton.disabled = false;
+      cartItemsContainer.querySelectorAll('.cart-quantity').forEach(button => button.addEventListener('click', () => {
+        const item = cart[Number(button.dataset.index)];
+        if (button.dataset.action === 'increase') item.quantity += 1;
+        else if (item.quantity > 1) item.quantity -= 1;
+        else cart.splice(Number(button.dataset.index), 1);
+        updateCartBadge();
+        renderCart();
+      }));
+      cartItemsContainer.querySelectorAll('.cart-remove').forEach(button => button.addEventListener('click', () => {
+        cart.splice(Number(button.dataset.index), 1);
+        updateCartBadge();
+        renderCart();
+      }));
+    }
+
+    function openCartDrawer() {
+      previouslyFocusedCartElement = document.activeElement;
+      renderCart();
+      cartDrawer.classList.add('is-open');
+      cartDrawer.setAttribute('aria-hidden', 'false');
+      document.body.classList.add('modal-open');
+      document.getElementById('cart-drawer-close').focus();
+    }
+
+    function closeCartDrawer() {
+      cartDrawer.classList.remove('is-open');
+      cartDrawer.setAttribute('aria-hidden', 'true');
+      document.body.classList.remove('modal-open');
+      if (previouslyFocusedCartElement) previouslyFocusedCartElement.focus();
+    }
+
+    function openOrderConfirmation() {
+      if (!cart.length) return;
+      const subtotal = cart.reduce((total, item) => total + Number(item.price.replace('$', '')) * item.quantity, 0);
+      const discount = activeCoupon ? subtotal * activeCoupon.rate : 0;
+      const total = subtotal - discount;
+      const quantity = cart.reduce((count, item) => count + item.quantity, 0);
+      previouslyFocusedOrderElement = checkoutButton;
+      orderNumber.textContent = `DI-${Date.now().toString().slice(-6)}`;
+      orderTotal.textContent = `$${total.toFixed(2)}`;
+      orderItems.textContent = `${quantity} ${quantity === 1 ? 'book' : 'books'} reserved${activeCoupon ? ` · ${activeCoupon.label}` : ''}`;
+      closeCartDrawer();
+      orderModal.classList.add('is-open');
+      orderModal.setAttribute('aria-hidden', 'false');
+      document.body.classList.add('modal-open');
+      orderClose.focus();
+    }
+
+    function getCartTotal() {
+      const subtotal = cart.reduce((total, item) => total + Number(item.price.replace('$', '')) * item.quantity, 0);
+      return subtotal - (activeCoupon ? subtotal * activeCoupon.rate : 0);
+    }
+
+    function openPaymentModal() {
+      if (!cart.length) return;
+      closeCartDrawer();
+      paymentTotal.textContent = `$${getCartTotal().toFixed(2)}`;
+      paymentStatus.textContent = 'Use the demo card 4242 4242 4242 4242. No payment data is transmitted.';
+      paymentStatus.className = 'min-h-4 text-xs text-mist/55';
+      paymentSubmit.disabled = false;
+      paymentSubmit.innerHTML = '<i class="fa-solid fa-lock mr-2 text-xs" aria-hidden="true"></i>Pay securely';
+      paymentModal.classList.add('is-open');
+      paymentModal.setAttribute('aria-hidden', 'false');
+      document.body.classList.add('modal-open');
+      document.getElementById('payment-name').focus();
+    }
+
+    function closePaymentModal() {
+      paymentModal.classList.remove('is-open');
+      paymentModal.setAttribute('aria-hidden', 'true');
+      document.body.classList.remove('modal-open');
+      checkoutButton.focus();
+    }
+
+    function closeOrderConfirmation() {
+      orderModal.classList.remove('is-open');
+      orderModal.setAttribute('aria-hidden', 'true');
+      document.body.classList.remove('modal-open');
+      if (previouslyFocusedOrderElement) previouslyFocusedOrderElement.focus();
+    }
+
+    window.addEventListener('scroll', () => header.classList.toggle('nav-scrolled', window.scrollY > 24), { passive: true });
+
+    menuButton.addEventListener('click', () => {
+      const isOpen = !mobileMenu.classList.contains('hidden');
+      mobileMenu.classList.toggle('hidden', isOpen);
+      menuButton.setAttribute('aria-expanded', String(!isOpen));
+      menuButton.innerHTML = isOpen ? '<i class="fa-solid fa-bars text-xl" aria-hidden="true"></i>' : '<i class="fa-solid fa-xmark text-xl" aria-hidden="true"></i>';
+    });
+
+    document.querySelectorAll('#mobile-menu a').forEach(link => link.addEventListener('click', () => {
+      mobileMenu.classList.add('hidden');
+      menuButton.setAttribute('aria-expanded', 'false');
+      menuButton.innerHTML = '<i class="fa-solid fa-bars text-xl" aria-hidden="true"></i>';
+    }));
+
+    document.querySelectorAll('.add-to-cart').forEach(button => button.addEventListener('click', () => {
+      const card = button.closest('.book-card');
+      addCartItem(card.dataset.title, card.dataset.price);
+      const original = button.textContent;
+      button.textContent = 'Added ✓';
+      button.classList.add('border-gold', 'text-gold');
+      button.classList.add('success-pulse');
+      setTimeout(() => { button.textContent = original; }, 1300);
+      setTimeout(() => button.classList.remove('success-pulse'), 750);
+    }));
+
+    // Book details modal: supports mouse, keyboard, Escape, and backdrop dismissal.
+    const bookModal = document.getElementById('book-modal');
+    const modalClose = document.getElementById('modal-close');
+    const modalCover = document.getElementById('modal-cover');
+    const modalType = document.getElementById('modal-type');
+    const modalTitle = document.getElementById('modal-title');
+    const modalDescription = document.getElementById('modal-description');
+    const modalPrice = document.getElementById('modal-price');
+    const modalAdd = document.getElementById('modal-add');
+    let previouslyFocusedElement = null;
+    let activeBookTitle = '';
+
+    function openBookModal(card) {
+      previouslyFocusedElement = document.activeElement;
+      activeBookTitle = card.dataset.title;
+      modalCover.src = card.dataset.cover;
+      modalCover.alt = `${activeBookTitle} cover`;
+      modalType.textContent = card.dataset.type;
+      modalTitle.textContent = activeBookTitle;
+      modalDescription.textContent = card.dataset.description;
+      modalPrice.textContent = card.dataset.price;
+      modalAdd.textContent = 'Add to cart';
+      const icon = document.createElement('i');
+      icon.className = 'fa-solid fa-bag-shopping ml-2 text-xs';
+      icon.setAttribute('aria-hidden', 'true');
+      modalAdd.append(icon);
+      bookModal.classList.add('is-open');
+      bookModal.setAttribute('aria-hidden', 'false');
+      document.body.classList.add('modal-open');
+      modalClose.focus();
+    }
+
+    function closeBookModal() {
+      bookModal.classList.remove('is-open');
+      bookModal.setAttribute('aria-hidden', 'true');
+      document.body.classList.remove('modal-open');
+      if (previouslyFocusedElement) previouslyFocusedElement.focus();
+    }
+
+    document.querySelectorAll('.book-card').forEach(card => {
+      card.addEventListener('click', event => {
+        if (!event.target.closest('.add-to-cart')) openBookModal(card);
+      });
+      card.addEventListener('keydown', event => {
+        if ((event.key === 'Enter' || event.key === ' ') && event.target === card) {
+          event.preventDefault();
+          openBookModal(card);
+        }
+      });
+    });
+    modalClose.addEventListener('click', closeBookModal);
+    bookModal.addEventListener('click', event => { if (event.target === bookModal) closeBookModal(); });
+    document.addEventListener('keydown', event => { if (event.key === 'Escape' && bookModal.classList.contains('is-open')) closeBookModal(); });
+    modalAdd.addEventListener('click', () => {
+      addCartItem(activeBookTitle, modalPrice.textContent);
+      modalAdd.innerHTML = 'Added <span aria-hidden="true">✓</span>';
+      modalAdd.classList.add('success-pulse');
+      setTimeout(() => { if (bookModal.classList.contains('is-open')) closeBookModal(); }, 650);
+    });
+
+    document.getElementById('cart-button').addEventListener('click', openCartDrawer);
+    document.getElementById('mobile-cart-button').addEventListener('click', openCartDrawer);
+    document.getElementById('cart-drawer-close').addEventListener('click', closeCartDrawer);
+    document.querySelector('.cart-drawer-backdrop').addEventListener('click', closeCartDrawer);
+    function applyCoupon() {
+      const code = couponInput.value.trim().toUpperCase();
+      if (!code) {
+        activeCoupon = null;
+        couponStatus.textContent = 'Enter a coupon code to apply a discount.';
+        couponStatus.className = 'mt-2 min-h-4 text-xs text-mist/55';
+      } else if (couponCodes[code]) {
+        activeCoupon = couponCodes[code];
+        couponStatus.textContent = `${activeCoupon.label} applied with code ${code}.`;
+        couponStatus.className = 'mt-2 min-h-4 text-xs text-gold';
+      } else {
+        activeCoupon = null;
+        couponStatus.textContent = 'That code is not recognized. Try INK10 or DARK15.';
+        couponStatus.className = 'mt-2 min-h-4 text-xs text-crimson';
+      }
+      renderCart();
+    }
+    couponApply.addEventListener('click', applyCoupon);
+    couponInput.addEventListener('keydown', event => { if (event.key === 'Enter') applyCoupon(); });
+    checkoutButton.addEventListener('click', openPaymentModal);
+    paymentCancel.addEventListener('click', () => { closePaymentModal(); openCartDrawer(); });
+    paymentCard.addEventListener('input', () => { paymentCard.value = paymentCard.value.replace(/\D/g, '').slice(0, 16).replace(/(\d{4})(?=\d)/g, '$1 '); });
+    paymentExpiry.addEventListener('input', () => { const digits = paymentExpiry.value.replace(/\D/g, '').slice(0, 4); paymentExpiry.value = digits.length > 2 ? `${digits.slice(0, 2)} / ${digits.slice(2)}` : digits; });
+    paymentCvc.addEventListener('input', () => { paymentCvc.value = paymentCvc.value.replace(/\D/g, '').slice(0, 4); });
+    paymentForm.addEventListener('submit', event => {
+      event.preventDefault();
+      const cardDigits = paymentCard.value.replace(/\D/g, '');
+      const expiryDigits = paymentExpiry.value.replace(/\D/g, '');
+      const cvcDigits = paymentCvc.value.replace(/\D/g, '');
+      if (!paymentForm.checkValidity() || cardDigits.length !== 16 || expiryDigits.length !== 4 || cvcDigits.length < 3) {
+        paymentStatus.textContent = 'Please complete the demo fields. Use 4242 4242 4242 4242, 12/30, and any 3-digit CVC.';
+        paymentStatus.className = 'min-h-4 text-xs text-crimson';
+        return;
+      }
+      paymentSubmit.disabled = true;
+      paymentSubmit.innerHTML = '<i class="fa-solid fa-spinner fa-spin mr-2 text-xs" aria-hidden="true"></i>Processing payment...';
+      paymentStatus.textContent = 'Securely simulating payment authorization...';
+      paymentStatus.className = 'min-h-4 text-xs text-gold';
+      setTimeout(() => {
+        closePaymentModal();
+        openOrderConfirmation();
+      }, 850);
+    });
+    orderClose.addEventListener('click', closeOrderConfirmation);
+    orderModal.addEventListener('click', event => { if (event.target === orderModal) closeOrderConfirmation(); });
+    document.addEventListener('keydown', event => {
+      if (event.key !== 'Escape') return;
+      if (orderModal.classList.contains('is-open')) closeOrderConfirmation();
+      else if (paymentModal.classList.contains('is-open')) closePaymentModal();
+      else if (cartDrawer.classList.contains('is-open')) closeCartDrawer();
+    });
+    renderCart();
+
+    document.getElementById('contact-form').addEventListener('submit', event => {
+      event.preventDefault();
+      const status = document.getElementById('form-status');
+      status.textContent = 'Your letter has been sent into the night.';
+      event.target.reset();
+    });
+
+    const revealObserver = new IntersectionObserver(entries => entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+        revealObserver.unobserve(entry.target);
+      }
+    }), { threshold: 0.12 });
+    document.querySelectorAll('.reveal, .section-fade').forEach(element => revealObserver.observe(element));
+
+    // Gentle magnetic movement gives primary actions a tactile feel on pointer devices.
+    if (window.matchMedia('(pointer: fine) and (prefers-reduced-motion: no-preference)').matches) {
+      document.querySelectorAll('.magnetic').forEach(button => {
+        button.addEventListener('pointermove', event => {
+          const bounds = button.getBoundingClientRect();
+          const x = (event.clientX - bounds.left - bounds.width / 2) * 0.12;
+          const y = (event.clientY - bounds.top - bounds.height / 2) * 0.12;
+          button.style.transform = `translate(${x}px, ${y}px)`;
+        });
+        button.addEventListener('pointerleave', () => { button.style.transform = ''; });
+      });
+
+      // Subtle 3D tilt on book cards, with a reset on pointer exit.
+      document.querySelectorAll('.tilt-card').forEach(card => {
+        card.addEventListener('pointermove', event => {
+          const bounds = card.getBoundingClientRect();
+          const rotateX = ((event.clientY - bounds.top) / bounds.height - .5) * -5;
+          const rotateY = ((event.clientX - bounds.left) / bounds.width - .5) * 5;
+          card.style.transform = `perspective(900px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) translateY(-4px)`;
+        });
+        card.addEventListener('pointerleave', () => { card.style.transform = ''; });
+      });
+    }
+
+    // Custom cursor is limited to the hero and only enabled for fine-pointer devices.
+    const customCursor = document.getElementById('custom-cursor');
+    const customCursorDot = document.getElementById('custom-cursor-dot');
+    const heroForCursor = document.getElementById('home');
+    const canUseCustomCursor = window.matchMedia('(pointer: fine) and (prefers-reduced-motion: no-preference)').matches;
+    if (canUseCustomCursor) {
+      let cursorX = -100;
+      let cursorY = -100;
+      let cursorFrame = null;
+      let cursorTarget = null;
+
+      const renderCursor = () => {
+        customCursor.style.transform = `translate3d(${cursorX - 17}px, ${cursorY - 17}px, 0)`;
+        customCursorDot.style.transform = `translate3d(${cursorX - 2.5}px, ${cursorY - 2.5}px, 0)`;
+        cursorFrame = null;
+      };
+
+      heroForCursor.addEventListener('pointerenter', () => {
+        customCursor.classList.add('is-visible');
+        customCursorDot.classList.add('is-visible');
+      }, { passive: true });
+      heroForCursor.addEventListener('pointermove', event => {
+        cursorX = event.clientX;
+        cursorY = event.clientY;
+        if (!cursorFrame) cursorFrame = requestAnimationFrame(renderCursor);
+      }, { passive: true });
+      heroForCursor.addEventListener('pointerleave', () => {
+        customCursor.classList.remove('is-visible', 'is-hovering');
+        customCursorDot.classList.remove('is-visible');
+      }, { passive: true });
+
+      heroForCursor.querySelectorAll('a, button').forEach(element => {
+        element.addEventListener('pointerenter', () => {
+          cursorTarget = element;
+          customCursor.classList.add('is-hovering');
+        }, { passive: true });
+        element.addEventListener('pointerleave', () => {
+          if (cursorTarget === element) {
+            cursorTarget = null;
+            customCursor.classList.remove('is-hovering');
+          }
+        }, { passive: true });
+      });
+    }
+
+    // Lightweight hero particle field: no external library required.
+    const particleCanvas = document.getElementById('hero-particles');
+    const particleContext = particleCanvas.getContext('2d');
+    const heroSection = document.getElementById('home');
+    const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+    const smallScreen = window.matchMedia('(max-width: 767px)');
+    const finePointer = window.matchMedia('(pointer: fine)');
+    let particles = [];
+    let heroWidth = 0;
+    let heroHeight = 0;
+    let pointerX = 0;
+    let pointerY = 0;
+    let heroIsVisible = true;
+    let particleFrame = null;
+    let lastParticleFrame = 0;
+
+    function createParticle() {
+      return {
+        x: Math.random() * heroWidth,
+        y: Math.random() * heroHeight,
+        radius: Math.random() * 1.7 + .35,
+        speed: Math.random() * .22 + .06,
+        drift: (Math.random() - .5) * .18,
+        phase: Math.random() * Math.PI * 2,
+        alpha: Math.random() * .45 + .12,
+        gold: Math.random() > .72
+      };
+    }
+
+    function resizeParticleCanvas() {
+      const bounds = heroSection.getBoundingClientRect();
+      const pixelRatio = Math.min(window.devicePixelRatio || 1, smallScreen.matches ? 1.25 : 1.75);
+      heroWidth = bounds.width;
+      heroHeight = bounds.height;
+      particleCanvas.width = Math.floor(heroWidth * pixelRatio);
+      particleCanvas.height = Math.floor(heroHeight * pixelRatio);
+      particleCanvas.style.width = `${heroWidth}px`;
+      particleCanvas.style.height = `${heroHeight}px`;
+      particleContext.setTransform(pixelRatio, 0, 0, pixelRatio, 0, 0);
+      const particleCount = smallScreen.matches
+        ? Math.min(34, Math.max(22, Math.floor(heroWidth / 14)))
+        : Math.min(82, Math.max(38, Math.floor(heroWidth / 16)));
+      particles = Array.from({ length: particleCount }, createParticle);
+    }
+
+    function drawParticles(time = 0) {
+      particleContext.clearRect(0, 0, heroWidth, heroHeight);
+      particles.forEach(particle => {
+        if (!reduceMotion.matches) {
+          particle.y -= particle.speed;
+          particle.x += particle.drift + Math.sin(time * .0005 + particle.phase) * .08;
+          if (particle.y < -10) { particle.y = heroHeight + 10; particle.x = Math.random() * heroWidth; }
+          if (particle.x < -10) particle.x = heroWidth + 10;
+          if (particle.x > heroWidth + 10) particle.x = -10;
+        }
+        const parallaxX = finePointer.matches ? pointerX * (particle.radius * .9) : 0;
+        const parallaxY = finePointer.matches ? pointerY * (particle.radius * .55) : 0;
+        const pulse = .72 + Math.sin(time * .0012 + particle.phase) * .28;
+        const color = particle.gold ? `196,164,108` : `156,49,71`;
+        particleContext.beginPath();
+        particleContext.fillStyle = `rgba(${color}, ${particle.alpha * pulse})`;
+        particleContext.shadowBlur = particle.radius > 1.3 ? 10 : 4;
+        particleContext.shadowColor = `rgba(${color}, .5)`;
+        particleContext.arc(particle.x + parallaxX, particle.y + parallaxY, particle.radius, 0, Math.PI * 2);
+        particleContext.fill();
+      });
+    }
+
+    function animateParticles(time) {
+      if (!heroIsVisible) {
+        particleFrame = null;
+        return;
+      }
+      const frameInterval = smallScreen.matches ? 1000 / 30 : 1000 / 45;
+      if (time - lastParticleFrame >= frameInterval) {
+        lastParticleFrame = time;
+        drawParticles(time);
+      }
+      particleFrame = requestAnimationFrame(animateParticles);
+    }
+
+    if (finePointer.matches && !reduceMotion.matches) {
+      heroSection.addEventListener('pointermove', event => {
+        const bounds = heroSection.getBoundingClientRect();
+        pointerX = (event.clientX - bounds.left) / bounds.width - .5;
+        pointerY = (event.clientY - bounds.top) / bounds.height - .5;
+      }, { passive: true });
+      heroSection.addEventListener('pointerleave', () => { pointerX = 0; pointerY = 0; }, { passive: true });
+    }
+
+    const heroVisibilityObserver = new IntersectionObserver(([entry]) => {
+      heroIsVisible = entry.isIntersecting;
+      if (heroIsVisible && !reduceMotion.matches && !particleFrame) {
+        lastParticleFrame = 0;
+        particleFrame = requestAnimationFrame(animateParticles);
+      }
+    }, { threshold: 0.05 });
+    heroVisibilityObserver.observe(heroSection);
+
+    window.addEventListener('resize', resizeParticleCanvas, { passive: true });
+    smallScreen.addEventListener('change', resizeParticleCanvas);
+    resizeParticleCanvas();
+    drawParticles(0);
+    if (!reduceMotion.matches) particleFrame = requestAnimationFrame(animateParticles);
+  </script>
+</body>
+</html>
